@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Ideas Graphics</title>
+  <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a5c; /* Dark navy blue */
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 5px 15px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .logo {
+            width: 50px;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 60vh;
+            background: url('https://i.postimg.cc/rm827dXw/file-Po-Px-Hg-Tg9-Bgbjmqv-Q2-M6j-H.webp') no-repeat center center/cover;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Black overlay */
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+        }
+
+        /* Oval Image */
+        .oval-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 5px solid #fff;
+        }
+
+        .oval-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* About Us Section */
+        .about-us {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .about-us h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-us p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 50px 20px;
+            background: linear-gradient(to bottom, #1a1a7d, #0a0a5c); /* Dark gradient */
+            text-align: center;
+        }
+
+        .services h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .slideshow {
+            position: relative;
+            max-width: 600px;
+            height: 300px;
+            margin: 30px auto;
+            overflow: hidden;
+            border-radius: 10px;
+            background: url('https://i.postimg.cc/C5tYjmsv/d1001f11e170e53af180eb6840ad2b11.jpg') no-repeat center center/cover;
+        }
+
+        .slideshow::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Black overlay */
+            z-index: 1;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide {
+            flex: 1 0 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .prev, .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        /* Contact Section */
+        .contact {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .contact h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #0a0a5c;
+        }
+    </style>
+ </head>
+ <body>
+  <!-- Navigation Bar -->
+  <nav>
+   <img src="https://i.postimg.cc/pdmD4mtz/IMG-20241214-230800.png" alt="Visual Ideas Graphics Logo" class="logo">
+   <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+   </ul>
+  </nav>
+  <!-- Hero Section -->
+  <header class="hero" id="hero">
+   <div class="hero-content">
+    <h1>Visual Ideas Graphics</h1>
+    <p>Innovative Designs for Your Brand</p>
+   </div>
+  </header>
+  <!-- About Us Section -->
+  <section class="about-us" id="about-us">
+   <div class="container">
+    <!-- Replacing the oval image with the new image -->
+    <div class="oval-image">
+     <img src="https://i.postimg.cc/mkh8HGjH/41dbe8b71d87d33b56c5f147b57da4ca.jpg" alt="Visual Ideas Team">
+    </div>
+    <h2>About Us</h2>
+    <p>We are dedicated to delivering the best service with our attention to detail. Our mission is to bring your vision to life through our designs or developments, helping you achieve your business goals.</p>
+   </div>
+  </section>
+  <!-- Services Section -->
+  <section id="services" class="services">
+   <div class="container">
+    <h2>What We Do</h2>
+    <div class="slideshow">
+     <div class="slides" id="slides">
+      <div class="slide">Real Estate Websites and Apps</div>
+      <div class="slide">E-commerce Websites and Apps</div>
+      <div class="slide">Graphic Design: Logos, Posters, Business Cards, Social Media Posters</div>
+      <div class="slide">Graphic Design: Invoices, Letterheads, and more</div>
+      <div class="slide">Food Delivery Websites</div>
+      <div class="slide">Cosmetic Websites</div>
+      <div class="slide">NGO Websites</div>
+     </div>
+     <button class="prev" onclick="prevSlide()">❮</button>
+     <button class="next" onclick="nextSlide()">❯</button>
+    </div>
+   </div>
+  </section>
+  <!-- Contact Section -->
+  <section id="contact" class="contact">
+   <div class="container">
+    <h2>Contact Us</h2>
+    <p>Email: visualideaswebsite@gmail.com</p>
+    <p>Call or WhatsApp: 0797046378</p>
+   </div>
+  </section>
+  <!-- Footer -->
+  <footer>
+   <p>© 2025 Visual Ideas Graphics. All rights reserved.</p>
+  </footer>
+
+  <script>
+        let slideIndex = 0;
+
+        function showSlide(index) {
+            const slides = document.getElementById('slides');
+            const totalSlides = slides.children.length;
+            if (index >= totalSlides) slideIndex = 0;
+            if (index < 0) slideIndex = totalSlides - 1;
+            slides.style.transform = 'translateX(' + (-slideIndex * 100) + '%)';
+        }
+
+        function nextSlide() {
+            slideIndex++;
+            showSlide(slideIndex);
+        }
+
+        function prevSlide() {
+            slideIndex--;
+            showSlide(slideIndex);
+        }
+
+        // Initial display of slides
+        showSlide(slideIndex);
+  </script>
+ 
+</body></html>
