@@ -1,310 +1,279 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Visual Ideas Graphics</title>
   <style>
-        /* General Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #0a0a5c; /* Dark navy blue */
-            color: white;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    body {
+      background: #000;
+      color: #fff;
+    }
 
-        /* Navigation Bar */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 20px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      z-index: 1000;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            list-style: none;
-        }
+    nav a {
+      color: #0f0;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            padding: 5px 15px;
-        }
+    header {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
 
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-        }
+    #matrixCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      display: block;
+    }
 
-        .logo {
-            width: 50px;
-            height: auto;
-            border-radius: 50%;
-        }
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: -1;
+    }
 
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 60vh;
-            background: url('https://i.postimg.cc/rm827dXw/file-Po-Px-Hg-Tg9-Bgbjmqv-Q2-M6j-H.webp') no-repeat center center/cover;
-        }
+    header h1 {
+      font-size: 3rem;
+      background: linear-gradient(90deg, #00ff99, #00ccff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7); /* Black overlay */
-        }
+    header p {
+      font-size: 1.5rem;
+      color: #a0ffa0;
+      margin-top: 1rem;
+    }
 
-        .hero-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 1;
-        }
+    section {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 1rem;
+    }
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
+    h2 {
+      text-align: center;
+      color: #0f0;
+      margin-bottom: 2rem;
+    }
 
-        .hero p {
-            font-size: 1.2rem;
-        }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
 
-        /* Oval Image */
-        .oval-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 20px auto;
-            overflow: hidden;
-            border: 5px solid #fff;
-        }
+    .card {
+      background: rgba(0, 50, 0, 0.6);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 15px #00ff99;
+    }
 
-        .oval-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .card h3 {
+      color: #00ffcc;
+    }
 
-        /* About Us Section */
-        .about-us {
-            padding: 50px 20px;
-            text-align: center;
-        }
+    .card p {
+      color: #aaffaa;
+    }
 
-        .about-us h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
+    .card a {
+      color: #00ffcc;
+      text-decoration: none;
+    }
 
-        .about-us p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
-
-        /* Services Section */
-        .services {
-            padding: 50px 20px;
-            background: linear-gradient(to bottom, #1a1a7d, #0a0a5c); /* Dark gradient */
-            text-align: center;
-        }
-
-        .services h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .slideshow {
-            position: relative;
-            max-width: 600px;
-            height: 300px;
-            margin: 30px auto;
-            overflow: hidden;
-            border-radius: 10px;
-            background: url('https://i.postimg.cc/C5tYjmsv/d1001f11e170e53af180eb6840ad2b11.jpg') no-repeat center center/cover;
-        }
-
-        .slideshow::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Black overlay */
-            z-index: 1;
-        }
-
-        .slides {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-            position: relative;
-            z-index: 2;
-        }
-
-        .slide {
-            flex: 1 0 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .prev, .next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .prev {
-            left: 10px;
-        }
-
-        .next {
-            right: 10px;
-        }
-
-        /* Contact Section */
-        .contact {
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .contact h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .contact p {
-            font-size: 1.2rem;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #0a0a5c;
-        }
-    </style>
- </head>
- <body>
-  <!-- Navigation Bar -->
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.8);
+      color: #0f0;
+    }
+  </style>
+</head>
+<body>
   <nav>
-   <img src="https://i.postimg.cc/pdmD4mtz/IMG-20241214-230800.png" alt="Visual Ideas Graphics Logo" class="logo">
-   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-   </ul>
+    <a href="#services">Services</a>
+    <a href="#projects">Projects</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#contact">Contact</a>
   </nav>
-  <!-- Hero Section -->
-  <header class="hero" id="hero">
-   <div class="hero-content">
-    <h1>Visual Ideas Graphics</h1>
-    <p>Innovative Designs for Your Brand</p>
-   </div>
+
+  <header>
+    <canvas id="matrixCanvas"></canvas>
+    <div id="overlay"></div>
+    <div>
+      <h1>Visual Ideas Graphics</h1>
+      <p>Frontend & Backend Web Development</p>
+    </div>
   </header>
-  <!-- About Us Section -->
-  <section class="about-us" id="about-us">
-   <div class="container">
-    <!-- Replacing the oval image with the new image -->
-    <div class="oval-image">
-     <img src="https://i.postimg.cc/mkh8HGjH/41dbe8b71d87d33b56c5f147b57da4ca.jpg" alt="Visual Ideas Team">
+
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Website Development</h3>
+        <p>We build professional websites starting from 5,000 Ksh. Get found online and grow your business.</p>
+      </div>
+      <div class="card">
+        <h3>UI/UX Design</h3>
+        <p>We create beautiful and intuitive user experiences that keep visitors engaged.</p>
+      </div>
+      <div class="card">
+        <h3>Backend Systems</h3>
+        <p>Powerful and secure backend development for your custom business logic and data.</p>
+      </div>
     </div>
-    <h2>About Us</h2>
-    <p>We are dedicated to delivering the best service with our attention to detail. Our mission is to bring your vision to life through our designs or developments, helping you achieve your business goals.</p>
-   </div>
   </section>
-  <!-- Services Section -->
-  <section id="services" class="services">
-   <div class="container">
-    <h2>What We Do</h2>
-    <div class="slideshow">
-     <div class="slides" id="slides">
-      <div class="slide">Real Estate Websites and Apps</div>
-      <div class="slide">E-commerce Websites and Apps</div>
-      <div class="slide">Graphic Design: Logos, Posters, Business Cards, Social Media Posters</div>
-      <div class="slide">Graphic Design: Invoices, Letterheads, and more</div>
-      <div class="slide">Food Delivery Websites</div>
-      <div class="slide">Cosmetic Websites</div>
-      <div class="slide">NGO Websites</div>
-     </div>
-     <button class="prev" onclick="prevSlide()">❮</button>
-     <button class="next" onclick="nextSlide()">❯</button>
+
+  <section id="projects">
+    <h2>Recent Projects</h2>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://bella63-glitch.github.io/Legacy-genuine-property-/" target="_blank">Legacy Genuine Property</a></h3>
+        <p>A sleek property listing platform with intuitive navigation and property categories.</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://bella63-glitch.github.io/National-star-investment-Co.Ltd/" target="_blank">National Star Investment</a></h3>
+        <p>Corporate website showcasing real estate services and contact forms for investors.</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://bella63-glitch.github.io/Jonathan-Law-Advocates-/" target="_blank">Jonathan Law Advocates</a></h3>
+        <p>Clean and professional design for a law firm with SEO optimization and mobile support.</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://chayim.co.ke/" target="_blank">Chayim Kenya</a></h3>
+        <p>Chayim International Group is a premier property developer offering fully financed, mortgage-based solutions. We create exceptional residential and commercial projects with sustainability in mind.</p>
+      </div>
     </div>
-   </div>
   </section>
-  <!-- Contact Section -->
-  <section id="contact" class="contact">
-   <div class="container">
-    <h2>Contact Us</h2>
-    <p>Email: visualideaswebsite@gmail.com</p>
-    <p>Call or WhatsApp: 0797046378</p>
-   </div>
+
+  <section id="benefits">
+    <h2>Why Have a Website?</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Online Presence</h3>
+        <p>Over 80% of people research online before making a decision. A website ensures you're visible 24/7.</p>
+      </div>
+      <div class="card">
+        <h3>Credibility & Trust</h3>
+        <p>A professional website gives your business credibility and helps establish trust with potential clients.</p>
+      </div>
+      <div class="card">
+        <h3>Business Growth</h3>
+        <p>Reach more customers, automate communication, and open new opportunities for leads and sales.</p>
+      </div>
+    </div>
   </section>
-  <!-- Footer -->
+
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <div class="card" style="text-align:center;">
+      <p><strong>📍 Location:</strong> Freelance-based – available for projects globally</p>
+      <p><strong>📧 Email:</strong> <a href="mailto:visualideaswebsite@gmail.com">visualideaswebsite@gmail.com</a></p>
+      <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/254797046378" target="_blank">Chat on WhatsApp</a></p>
+    </div>
+  </section>
+
   <footer>
-   <p>© 2025 Visual Ideas Graphics. All rights reserved.</p>
+    &copy; 2025 Visual Ideas Graphics. All rights reserved.
   </footer>
 
   <script>
-        let slideIndex = 0;
+    const canvas = document.getElementById("matrixCanvas");
+    const ctx = canvas.getContext("2d");
 
-        function showSlide(index) {
-            const slides = document.getElementById('slides');
-            const totalSlides = slides.children.length;
-            if (index >= totalSlides) slideIndex = 0;
-            if (index < 0) slideIndex = totalSlides - 1;
-            slides.style.transform = 'translateX(' + (-slideIndex * 100) + '%)';
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const letters = "アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 16;
+    const columns = Math.floor(width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > height && Math.random() > 0.975) {
+          drops[i] = 0;
         }
+        drops[i]++;
+      }
+    }
 
-        function nextSlide() {
-            slideIndex++;
-            showSlide(slideIndex);
-        }
+    setInterval(drawMatrix, 50);
 
-        function prevSlide() {
-            slideIndex--;
-            showSlide(slideIndex);
-        }
-
-        // Initial display of slides
-        showSlide(slideIndex);
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
   </script>
- 
-</body></html>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
