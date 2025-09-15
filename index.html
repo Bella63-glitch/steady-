@@ -1,432 +1,339 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Visual Ideas Graphics</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width,initial-scale=1"> 
+  <title>Steddy Trading Co. Ltd - Properties Admin</title> 
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
   <style>
-    /* Global Styles & Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+    :root {
+      --green: #006400;
+      --black: #000000;
+      --muted: #f2f2f2;
+      --card: #ffffff;
     }
-
-    body {
-      background: #000;
-      color: #fff;
-      line-height: 1.6;
-      overflow-x: hidden; /* Prevent horizontal scroll on small screens */
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #fbfbfb 0%, #f6f6f6 100%);
+      color:#222;
     }
-
-    /* Navigation */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.95); /* Slightly darker background */
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem; /* Reduced gap for mobile */
-      padding: 1rem 0.5rem; /* Adjusted padding for mobile */
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0, 255, 153, 0.2); /* Subtle shadow */
+    header{
+      background: linear-gradient(90deg,var(--green), var(--black));
+      color:#fff;
+      padding:16px 20px;
     }
-
-    nav a {
-      color: #00ff99; /* Brighter green */
-      text-decoration: none;
-      font-weight: 600; /* Bolder for emphasis */
-      font-size: 0.95rem; /* Slightly smaller for mobile, adjusts up */
-      transition: color 0.3s ease;
+    header h1{ margin:0; font-size:20px; }
+    .brand-sub { opacity:0.9; font-size:13px; margin-top:6px; }
+    nav{
+      display:flex;
+      background: #fff;
+      border-bottom: 1px solid #e7e7e7;
     }
-
-    nav a:hover {
-      color: #00ccff; /* Blue on hover */
+    nav button{
+      flex:1;
+      padding:12px 14px;
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      font-weight:600;
     }
-
-    /* Header Section */
-    header {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      flex-direction: column; /* Stack elements vertically */
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-      padding: 1rem; /* Add padding for smaller screens */
+    nav button.active, nav button:hover { background:#f3f3f3; }
+    .container{ padding:20px; max-width:1100px; margin:0 auto; }
+    .section{ display:none; }
+    .section.active{ display:block; }
+    table{ width:100%; border-collapse:collapse; background:var(--card); box-shadow:0 1px 2px rgba(0,0,0,0.03); }
+    th,td{ padding:10px 12px; border-bottom:1px solid #eee; text-align:left; vertical-align:middle; }
+    th{ background:#fafafa; font-weight:700; }
+    .property-img{ width:120px; height:auto; max-height:80px; object-fit:cover; border-radius:6px; border:1px solid #e6e6e6; }
+    form input[type="text"], form input[type="number"], form textarea, form select {
+      width:100%; max-width:520px; padding:10px; margin-top:8px; border:1px solid #ddd; border-radius:6px; box-sizing:border-box;
     }
-
-    #matrixCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      display: block;
+    form label{ display:block; margin-top:12px; font-weight:600; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+    .small { width:160px; }
+    .action-btn {
+      display:inline-block;
+      padding:8px 10px;
+      background:var(--green);
+      color:#fff;
+      border:0;
+      border-radius:6px;
+      cursor:pointer;
+      margin-right:6px;
     }
-
-    #overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.75); /* Slightly darker overlay */
-      z-index: -1;
-    }
-
-    header h1 {
-      font-size: 3.5rem; /* Adjusted for impact */
-      background: linear-gradient(90deg, #00ff99, #00ccff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem; /* Space between heading and paragraph */
-      font-weight: 700; /* Even bolder */
-    }
-
-    header p {
-      font-size: 1.6rem; /* Adjusted for readability */
-      color: #a0ffa0;
-      font-weight: 300; /* Lighter weight for sub-heading */
-    }
-
-    /* Sections */
-    section {
-      max-width: 1100px;
-      margin: 4rem auto; /* More vertical space */
-      padding: 1.5rem; /* Increased padding */
-    }
-
-    h2 {
-      text-align: center;
-      color: #00ff99; /* Consistent green */
-      margin-bottom: 2.5rem; /* More space below heading */
-      font-size: 2.5rem; /* Larger section titles */
-      font-weight: 600;
-    }
-
-    /* Grid Layout */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem; /* Consistent gap */
-    }
-
-    /* Card Styling */
-    .card {
-      background: rgba(0, 50, 0, 0.6);
-      padding: 2rem; /* More padding inside cards */
-      border-radius: 1rem;
-      box-shadow: 0 0 15px rgba(0, 255, 153, 0.4); /* Softer, glowing shadow */
-      border-left: 5px solid #00ff99; /* Accent border */
-      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover */
-    }
-
-    .card:hover {
-      transform: translateY(-5px); /* Lift effect */
-      box-shadow: 0 8px 25px rgba(0, 255, 153, 0.6); /* Stronger glow on hover */
-    }
-
-    .card h3 {
-      color: #00ccff; /* Blue for card titles */
-      margin-bottom: 1rem; /* Space below card title */
-      font-size: 1.5rem; /* Larger card titles */
-      font-weight: 600;
-    }
-
-    .card p {
-      color: #aaffaa;
-      font-size: 1rem; /* Standard paragraph size */
-    }
-
-    .card a {
-      color: #00ffcc;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .card a:hover {
-      color: #00e6e6; /* Slightly different blue on link hover */
-      text-decoration: underline;
-    }
-
-    /* Contact Card Specifics */
-    #contact .card {
-      text-align: center;
-      border-left: 5px solid #00ccff; /* Different accent color for contact */
-    }
-
-    #contact .card p {
-      margin-bottom: 0.5rem;
-    }
-
-    #contact .card a {
-      font-size: 1.1rem; /* Slightly larger links in contact */
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 1.5rem; /* More padding */
-      background: rgba(0, 0, 0, 0.95); /* Consistent with nav */
-      color: #00ff99;
-      font-size: 0.9rem;
-      border-top: 1px solid rgba(0, 255, 153, 0.1); /* Subtle top border */
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      nav {
-        gap: 1rem;
-        padding: 0.8rem 0.5rem;
-      }
-
-      nav a {
-        font-size: 0.85rem;
-      }
-
-      header h1 {
-        font-size: 2.5rem; /* Smaller on tablets/mobiles */
-      }
-
-      header p {
-        font-size: 1.2rem;
-      }
-
-      h2 {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-      }
-
-      section {
-        margin: 3rem auto;
-        padding: 1rem;
-      }
-
-      .card {
-        padding: 1.5rem;
-      }
-
-      .card h3 {
-        font-size: 1.3rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      nav {
-        flex-wrap: wrap; /* Allow nav items to wrap */
-        justify-content: center;
-        gap: 0.8rem;
-        padding: 0.6rem 0.3rem;
-      }
-      nav a {
-        font-size: 0.8rem;
-      }
-
-      header h1 {
-        font-size: 2rem; /* Even smaller for small phones */
-      }
-
-      header p {
-        font-size: 1rem;
-      }
-
-      h2 {
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-      }
-
-      section {
-        margin: 2rem auto;
-        padding: 0.8rem;
-      }
-
-      .card {
-        padding: 1.2rem;
-      }
-
-      .card h3 {
-        font-size: 1.2rem;
-      }
-
-      .card p {
-        font-size: 0.9rem;
-      }
-
-      #contact .card a {
-        font-size: 1rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <nav>
-    <a href="#services">Services</a>
-    <a href="#projects">Projects</a>
-    <a href="#benefits">Benefits</a>
-    <a href="#reviews">Reviews</a>
-    <a href="#contact">Contact</a>
-  </nav>
-
-  <header>
-    <canvas id="matrixCanvas"></canvas>
-    <div id="overlay"></div>
-    <div>
-      <h1>Visual Ideas Graphics</h1>
-      <p>Frontend & Backend Web Development</p>
-    </div>
-  </header>
-
-  <section id="services">
-    <h2>Our Services</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Website Development</h3>
-        <p>We build professional websites starting from 5,000 Ksh. Get found online and grow your business.</p>
-      </div>
-      <div class="card">
-        <h3>UI/UX Design</h3>
-        <p>We create beautiful and intuitive user experiences that keep visitors engaged.</p>
-      </div>
-      <div class="card">
-        <h3>Backend Systems</h3>
-        <p>Powerful and secure backend development for your custom business logic and data.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="projects">
-    <h2>Recent Projects</h2>
-    <div class="grid">
-      <div class="card">
-        <h3><a href="https://bella63-glitch.github.io/Legacy-genuine-property-/" target="_blank">Legacy Genuine Property</a></h3>
-        <p>A sleek property listing platform with intuitive navigation and property categories.</p>
-      </div>
-      <div class="card">
-        <h3><a href="https://bella63-glitch.github.io/National-star-investment-Co.Ltd/" target="_blank">National Star Investment</a></h3>
-        <p>Corporate website showcasing real estate services and contact forms for investors.</p>
-      </div>
-      <div class="card">
-        <h3><a href="https://bella63-glitch.github.io/Jonathan-Law-Advocates-/" target="_blank">Jonathan Law Advocates</a></h3>
-        <p>Clean and professional design for a law firm with SEO optimization and mobile support.</p>
-      </div>
-      <div class="card">
-        <h3><a href="https://chayim.co.ke/" target="_blank">Chayim Kenya</a></h3>
-        <p>Chayim International Group is a premier property developer offering fully financed, mortgage-based solutions. We create exceptional residential and commercial projects with sustainability in mind.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="benefits">
-    <h2>Why Have a Website?</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Online Presence</h3>
-        <p>Over 80% of people research online before making a decision. A website ensures you're visible 24/7.</p>
-      </div>
-      <div class="card">
-        <h3>Credibility & Trust</h3>
-        <p>A professional website gives your business credibility and helps establish trust with potential clients.</p>
-      </div>
-      <div class="card">
-        <h3>Business Growth</h3>
-        <p>Reach more customers, automate communication, and open new opportunities for leads and sales.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="reviews">
-    <h2>What Our Clients Say</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Legacy Genuine Property</h3>
-        <p>"Visual Ideas Graphics truly brought my vision to life! I'm incredibly happy with the unique design for my website; you seamlessly integrated my structure while remaining remarkably affordable. Your services exceeded my expectations."</p>
-      </div>
-      <div class="card">
-        <h3>Chayim International</h3>
-        <p>"My opinions and ideas were genuinely valued throughout the entire process until we achieved our goal. I truly appreciate that collaborative spirit and will absolutely work with Visual Ideas Graphics again!"</p>
-      </div>
-      <div class="card">
-        <h3>Jonathan Law Advocates</h3>
-        <p>"I'm very pleased to have found such an affordable yet high-quality website solution for my firm. Visual Ideas Graphics delivered exactly what we needed."</p>
-      </div>
-       <div class="card">
-        <h3>Askmyshoe</h3>
-        <p>"Getting a full e-commerce website for only 7,000 Ksh was an incredible deal! I honestly didn't expect such a high-quality outcome, but I'm so glad I trusted Visual Ideas Graphics. My business is thriving thanks to their work."</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <div class="card" style="text-align:center;">
-      <p><strong>📍 Location:</strong> Freelance-based – available for projects globally</p>
-      <p><strong>📧 Email:</strong> <a href="mailto:visualideaswebsite@gmail.com">visualideaswebsite@gmail.com</a></p>
-      <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/254797046378" target="_blank">Chat on WhatsApp</a></p>
-    </div>
-  </section>
-
-  <footer>
-    &copy; 2025 Visual Ideas Graphics. All rights reserved.
-  </footer>
-
+    .danger { background:#d33; }
+    .muted { color:#666; font-size:13px; }
+    .note { margin-top:8px; font-size:13px; color:#555; }
+  </style> 
+ </head> 
+ <body> 
+  <header> 
+   <div> 
+    <h1>Steddy Trading Co. Ltd — Admin Panel</h1> 
+    <div class="brand-sub">
+     Manage Properties • Green &amp; Black Theme
+    </div> 
+   </div> 
+  </header> 
+  <nav> <button class="tab active" data-tab="properties">Properties</button> <button class="tab" data-tab="upload">Upload / Edit Property</button> 
+  </nav> 
+  <div class="container"> 
+   <section id="properties" class="section active"> 
+    <h2>Properties</h2> 
+    <table id="propertiesTable" aria-live="polite"> 
+     <thead> 
+      <tr> 
+       <th>Image</th> 
+       <th>Title</th> 
+       <th>Price</th> 
+       <th>Location</th> 
+       <th>Description</th> 
+       <th>Actions</th> 
+      </tr> 
+     </thead> 
+     <tbody></tbody> 
+    </table> 
+    <p class="note">Tip: Click "Upload / Edit Property" to add or change records. Existing images are preserved unless you upload new ones.</p> 
+   </section> 
+   <section id="upload" class="section"> 
+    <h2 id="formTitle">Upload New Property</h2> 
+    <form id="uploadForm"> 
+     <input type="hidden" id="propertyId"> <label for="title">Title</label> 
+     <input id="title" type="text" placeholder="3 Bedroom Apartment in Kilimani" required> 
+     <div class="row"> 
+      <div> <label for="price">Price (number)</label> 
+       <input id="price" type="number" step="0.01" placeholder="85000" required> 
+      </div> 
+      <div> <label for="location">Location</label> 
+       <input id="location" type="text" placeholder="Kilimani, Nairobi" required> 
+      </div> 
+     </div> <label for="description">Description</label> <textarea id="description" rows="4" placeholder="Spacious apartment with modern finishes..." required></textarea> <label for="images">Images (multiple allowed)</label> 
+     <input id="images" type="file" accept="image/*" multiple> 
+     <div style="margin-top:12px;"> <button class="action-btn" type="submit">Save Property</button> <button type="button" id="resetBtn" style="margin-left:8px;">Reset</button> 
+     </div> 
+     <p class="muted">If you leave the image input empty while updating, existing images will be kept.</p> 
+    </form> 
+   </section> 
+  </div> 
   <script>
-    const canvas = document.getElementById("matrixCanvas");
-    const ctx = canvas.getContext("2d");
+    // === Backendless credentials (YOUR corrected values) ===
+    const APP_ID = "0A7AD52F-FCFA-4EA6-B8BE-3866F42ECD0A";
+    const REST_API_KEY = "513E911B-04C0-4789-B660-627949989BE9";
+    const BASE = `https://api.backendless.com/${APP_ID}/${REST_API_KEY}`;
+    const DATA_ENDPOINT = `${BASE}/data/Properties`;
+    const axiosJsonConfig = { headers: { "Content-Type": "application/json" } };
 
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+    // UI references
+    const tabs = document.querySelectorAll(".tab");
+    const sections = document.querySelectorAll(".section");
+    const propertiesTbody = document.querySelector("#propertiesTable tbody");
+    const uploadForm = document.getElementById("uploadForm");
+    const resetBtn = document.getElementById("resetBtn");
+    const formTitle = document.getElementById("formTitle");
 
-    const letters = "アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const fontSize = 16;
-    const columns = Math.floor(width / fontSize);
-    const drops = Array(columns).fill(1);
+    // Form fields
+    const fldId = document.getElementById("propertyId");
+    const fldTitle = document.getElementById("title");
+    const fldPrice = document.getElementById("price");
+    const fldLocation = document.getElementById("location");
+    const fldDescription = document.getElementById("description");
+    const fldImages = document.getElementById("images");
 
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, width, height);
+    let currentImageUrls = []; // holds existing imageurls when editing
 
-      ctx.fillStyle = "#0F0";
-      ctx.font = fontSize + "px monospace";
+    // Tab switching
+    tabs.forEach(btn => {
+      btn.addEventListener("click", () => {
+        tabs.forEach(b => b.classList.remove("active"));
+        sections.forEach(s => s.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.tab).classList.add("active");
+      });
+    });
 
-      for (let i = 0; i < drops.length; i++) {
-        const char = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+    // Utility: human currency formatting (KES)
+    function formatKES(value) {
+      if (value === undefined || value === null || isNaN(Number(value))) return "-";
+      try {
+        return "KES " + new Intl.NumberFormat().format(Number(value));
+      } catch {
+        return "KES " + value;
       }
     }
 
-    setInterval(drawMatrix, 50);
+    // Fetch and render properties
+    async function fetchProperties() {
+      try {
+        const res = await axios.get(DATA_ENDPOINT, axiosJsonConfig);
+        const items = Array.isArray(res.data) ? res.data : [];
+        propertiesTbody.innerHTML = "";
+        items.forEach(p => {
+          const mainImage = Array.isArray(p.imageurls) && p.imageurls.length ? p.imageurls[0] : "";
+          const descShort = (p.description || "").length > 120 ? (p.description || "").slice(0, 117) + "..." : (p.description || "");
+          propertiesTbody.innerHTML += `
+            <tr>
+              <td>${ mainImage ? `<img src="${mainImage}" class="property-img" alt="property image">` : `<div style="width:120px;height:80px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#999">No image</div>` }</td>
+              <td>${escapeHtml(p.title || "-")}</td>
+              <td>${formatKES(p.price)}</td>
+              <td>${escapeHtml(p.location || "-")}</td>
+              <td style="max-width:340px">${escapeHtml(descShort)}</td>
+              <td>
+                <button class="action-btn" onclick="loadForUpdate('${p.objectId}')">Edit</button>
+                <button class="action-btn danger" onclick="deleteProperty('${p.objectId}')">Delete</button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (err) {
+        console.error("Error fetching properties:", err?.response?.data || err.message || err);
+        alert("Failed to fetch properties. Check console for details.");
+      }
+    }
 
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    // Delete property
+    async function deleteProperty(id){
+      try {
+        if (!confirm("Delete this property?")) return;
+        await axios.delete(`${DATA_ENDPOINT}/${id}`, axiosJsonConfig);
+        alert("Property deleted.");
+        fetchProperties();
+      } catch (err) {
+        console.error("Delete error:", err?.response?.data || err.message || err);
+        alert("Failed to delete property.");
+      }
+    }
+
+    // Load property to form for update
+    async function loadForUpdate(id){
+      try {
+        const res = await axios.get(`${DATA_ENDPOINT}/${id}`, axiosJsonConfig);
+        const p = res.data;
+        fldId.value = id;
+        fldTitle.value = p.title || "";
+        fldPrice.value = p.price ?? "";
+        fldLocation.value = p.location || "";
+        fldDescription.value = p.description || "";
+
+        currentImageUrls = Array.isArray(p.imageurls) ? p.imageurls.slice() : [];
+
+        formTitle.textContent = "Edit Property";
+        // switch to upload tab
+        document.querySelector('[data-tab="upload"]').click();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error("Load for update error:", err?.response?.data || err.message || err);
+        alert("Failed to load property for editing.");
+      }
+    }
+
+    // Reset form
+    function resetForm(){
+      fldId.value = "";
+      fldTitle.value = "";
+      fldPrice.value = "";
+      fldLocation.value = "";
+      fldDescription.value = "";
+      fldImages.value = "";
+      currentImageUrls = [];
+      formTitle.textContent = "Upload New Property";
+    }
+
+    resetBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      resetForm();
     });
-  </script>
-</body>
-</html>
 
+    // Submit (create/update)
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = fldId.value;
+      const title = fldTitle.value.trim();
+      const price = fldPrice.value !== "" ? parseFloat(fldPrice.value) : null;
+      const location = fldLocation.value.trim();
+      const description = fldDescription.value.trim();
+      const files = fldImages.files;
 
+      if (!title || price === null || !location || !description) {
+        return alert("Please fill Title, Price, Location and Description.");
+      }
 
+      try {
+        // Upload files (if any) to Backendless File storage
+        let uploadedUrls = [];
+        if (files && files.length) {
+          // upload each file and collect the file URLs
+          const uploadPromises = Array.from(files).map(async (file) => {
+            // prepend timestamp to avoid accidental collisions
+            const safeFileName = `${Date.now()}-${sanitizeFileName(file.name)}`;
+            const uploadUrl = `${BASE}/files/properties-images/${encodeURIComponent(safeFileName)}?overwrite=true`;
+            const form = new FormData();
+            form.append('file', file);
+            // IMPORTANT: Do not send application/json header for file uploads
+            const resp = await axios.post(uploadUrl, form, { headers: { 'Content-Type': 'multipart/form-data' } });
+            // Backendless file URL format:
+            return `https://backendlessappcontent.com/${APP_ID}/${REST_API_KEY}/files/properties-images/${encodeURIComponent(safeFileName)}`;
+          });
+          uploadedUrls = await Promise.all(uploadPromises);
+        }
 
+        // final imageurls value: either newly uploaded URLs (if any) or existing currentImageUrls (when editing)
+        const finalImageUrls = uploadedUrls.length ? uploadedUrls : (currentImageUrls.length ? currentImageUrls : []);
 
+        // assemble payload
+        const payload = {
+          title,
+          description,
+          price,
+          location,
+          imageurls: finalImageUrls,
+        };
 
+        // remove undefined fields so Backendless doesn't reject them
+        Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
+        if (id) {
+          // Update existing property
+          await axios.put(`${DATA_ENDPOINT}/${id}`, payload, axiosJsonConfig);
+          alert("Property updated.");
+        } else {
+          // Create
+          await axios.post(DATA_ENDPOINT, payload, axiosJsonConfig);
+          alert("Property created.");
+        }
 
+        resetForm();
+        fetchProperties();
+        // switch to properties tab
+        document.querySelector('[data-tab="properties"]').click();
+      } catch (err) {
+        console.error("Upload/Update error:", err?.response?.data || err.message || err);
+        // Provide a helpful error message if available
+        const msg = err?.response?.data?.message || err?.response?.data || err.message || 'Unknown error';
+        alert("Failed to save property: " + JSON.stringify(msg));
+      }
+    });
 
+    // Small helpers
+    function sanitizeFileName(name) {
+      return name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_.]/g, '');
+    }
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
 
+    // Expose these functions to window so inline onclick can call them
+    window.loadForUpdate = loadForUpdate;
+    window.deleteProperty = deleteProperty;
 
-
-
-
+    // initial load
+    fetchProperties();
+  </script> 
+ </body>
+</html>/
